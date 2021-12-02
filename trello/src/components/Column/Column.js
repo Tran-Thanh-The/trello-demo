@@ -6,12 +6,8 @@ import './Column.scss'
 import Card from 'components/Card/Card'
 
 export default function Column(props) {
-  const { column } = props
+  const { column, onCardDrop } = props
   const cards = mapOrder(column.cards, column.cardOrder, 'id')
-
-  const onCardDrop = (dropResult) => {
-    console.log()
-  }
 
   return (
     <div className="broad">
@@ -20,17 +16,8 @@ export default function Column(props) {
       </div>
       <ul className="card-list">
         <Container
-          // onDragStart={e => console.log("drag started", e)}
-          // onDragEnd={e => console.log("drag end", e)}
-          // onDragEnter={() => {
-          //   console.log("drag enter:", column.id);
-          // }}
-          // onDragLeave={() => {
-          //   console.log("drag leave:", column.id);
-          // }}
-          // onDropReady={p => console.log('Drop ready: ', p)}
           groupName="col"
-          onDrop={onCardDrop()}
+          onDrop={dropResult => onCardDrop(column.id, dropResult)}
           getChildPayload={index => cards[index]}
           dragClass="card-ghost"
           dropClass="card-ghost-drop"
@@ -49,9 +36,12 @@ export default function Column(props) {
               
         </Container>
       </ul>
-      <div className="footer-broad">
-        <button>thêm công việc</button>
-      </div>
+      <footer className="footer-broad">
+        <div className="container">
+          <i className="fa fa-plus icon" />
+          <button>thêm công việc</button>
+        </div>
+      </footer>
     </div>
   )
 }

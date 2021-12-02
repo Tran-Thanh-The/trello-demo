@@ -6,6 +6,7 @@ import { initialData } from 'actions/initialData'
 
 import Column from 'components/Column/Column'
 import { mapOrder } from 'utilities/sorts'
+import { applyDrag } from 'utilities/dragDrop'
 import { isEmpty } from 'lodash'
 
 export default function BroadContent() {
@@ -25,6 +26,21 @@ export default function BroadContent() {
     return <h1>Broad not found!</h1>
 
   const onColumnDrop = (dropResult) => {
+    setColumns(applyDrag(columns, dropResult))
+    let newBroad = broad
+    newBroad.columnOrder = columns.map(column => column.id)
+    setBroad(newBroad)
+  }
+
+  const onCardDrop = (id, dropResult) => {
+    if (dropResult.addedIndex !== null || dropResult.removedIndex !== null) {
+      let newColumns = [...columns];
+      let currentColumn = newColumns.find(c => c.id === id)
+      currentColumn.cards = applyDrag(currentColumn.cards, dropResult)
+      currentColumn.cardOrder = currentColumn.cards.map(i => i.id)
+
+      setColumns(newColumns)
+    }
   }
 
   return (
@@ -32,6 +48,7 @@ export default function BroadContent() {
       <Container
         orientation="horizontal"
         onDrop={onColumnDrop}
+        getChildPayload={index => columns[index]}
         dragHandleSelector=".column-drag-handle"
         dropPlaceholder={{
           animationDuration: 150,
@@ -41,10 +58,14 @@ export default function BroadContent() {
       >
         {columns.map((column, index) => (
           <Draggable key={index}>
-            <Column column={column} />
+            <Column column={column} onCardDrop={onCardDrop}/>
           </Draggable>
         ))}
       </Container>
+      <div className="add-new-column">
+          <i className="fa fa-plus icon" />
+          add new column
+      </div>
     </div>
   )
 }

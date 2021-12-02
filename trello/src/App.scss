@@ -13,7 +13,12 @@ body {
 
 .App {
   display: grid;
-  grid-template-rows: 40px 50px 1fr;
+  grid-template-rows: 40px 50px calc(100vh - 90px);
   height: 100vh;
   background-color: $primary-color-blur;
+
+  .icon {
+    font-size: 14px;
+    margin-right: 4px;
+  }
 }

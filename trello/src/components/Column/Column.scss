@@ -3,7 +3,7 @@
 .broad {
   flex: 0 0 auto;
   width: $width-broad;
-  margin: 10px 10px 20px;
+  margin: 5px 10px 30px;
 
   > * {
     padding: 8px;
@@ -26,7 +26,7 @@
     background-color: $bg-broad-color;
     list-style-type: none;
     overflow-y: scroll;
-    max-height: calc(100vh - 220px);
+    max-height: calc(100vh - 230px);
 
     &::-webkit-scrollbar {
       -webkit-appearance: none;
@@ -56,11 +56,23 @@
     background-color: $bg-broad-color;
     border-bottom-left-radius: $border-broad;
     border-bottom-right-radius: $border-broad;
+    height: 50px;
+    padding: 0 16px 0 10px;
+    display: flex;
 
-    button {
-      background-color: unset;
-      outline: none;
-      border: none;
+    div.container {
+      margin: auto;
+      width: 100%;
+      background-color: #dadbe2;
+      padding: 6px;
+      i {
+        padding-left: 4px;
+      }
+      button {
+        background-color: unset;
+        outline: none;
+        border: none;
+      }
     }
   }
 }
