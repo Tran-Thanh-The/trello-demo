@@ -1,0 +1,20 @@
+@import "_setting.scss";
+
+.broad-container {
+  display: flex;
+  margin: 0 10px 10px;
+  overflow-x: scroll;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($color: #fff, $alpha: 0.30);
+    border-radius: 4px;
+  }
+  .column-drop-preview {
+    background-color: rgba(150, 150, 200, 0.1);
+    border: 1px dashed #abc;
+    margin: 5px 45px 5px 5px;
+  }
+}

@@ -1,0 +1,66 @@
+@import "_setting.scss";
+
+.broad {
+  flex: 0 0 auto;
+  width: $width-broad;
+  margin: 10px 10px 20px;
+
+  > * {
+    padding: 8px;
+    margin: 0;
+  }
+
+  .title-broad {
+    background-color: $bg-broad-color;
+    border-top-left-radius: $border-broad;
+    border-top-right-radius: $border-broad;
+    cursor: pointer;
+
+    h3 {
+      margin: 0;
+      padding: 0 10px;
+    }
+  }
+
+  ul.card-list {
+    background-color: $bg-broad-color;
+    list-style-type: none;
+    overflow-y: scroll;
+    max-height: calc(100vh - 220px);
+
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 9px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #999;
+      border-right: 4px solid $bg-broad-color;
+    }
+    .card-ghost {
+      transition: transform 0.18s ease;
+      transform: rotateZ(5deg)
+    }
+    
+    .card-ghost-drop{
+      transition: transform 0.18s ease-in-out;
+      transform: rotateZ(0deg)
+    }
+    .card-drop-preview {
+      background-color: rgba(150, 150, 200, 0.1);
+      border: 1px dashed #abc;
+      margin: 5px;
+    }
+  }
+
+  .footer-broad {
+    background-color: $bg-broad-color;
+    border-bottom-left-radius: $border-broad;
+    border-bottom-right-radius: $border-broad;
+
+    button {
+      background-color: unset;
+      outline: none;
+      border: none;
+    }
+  }
+}

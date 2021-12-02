@@ -1,0 +1,22 @@
+@import "_setting.scss";
+
+li.card-item {
+  padding: 10px;
+  background-color: $bg-task-color;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 0 #091e4240;
+  border-radius: 4px;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+li.card-item:nth-last-child() {
+  margin-bottom: 0;
+}
