@@ -14,28 +14,31 @@ export default function Column(props) {
       <div className="title-broad column-drag-handle">
         <h3>{column.title}</h3>
       </div>
-      <ul className="card-list">
-        <Container
-          groupName="col"
-          onDrop={dropResult => onCardDrop(column.id, dropResult)}
-          getChildPayload={index => cards[index]}
-          dragClass="card-ghost"
-          dropClass="card-ghost-drop"
-          dropPlaceholder={{                      
-            animationDuration: 150,
-            showOnTop: true,
-            className: 'card-drop-preview' 
-          }}
-          dropPlaceholderAnimationDuration={200}
-        >
-          {column.cards.map((card, index) => (
-            <Draggable key={index}>
-              <Card card={card} />
-            </Draggable>
-          ))}
-              
-        </Container>
-      </ul>
+      {
+        cards && 
+        <ul className="card-list">
+          <Container
+            groupName="col"
+            onDrop={dropResult => onCardDrop(column.id, dropResult)}
+            getChildPayload={index => cards[index]}
+            dragClass="card-ghost"
+            dropClass="card-ghost-drop"
+            dropPlaceholder={{                      
+              animationDuration: 150,
+              showOnTop: true,
+              className: 'card-drop-preview' 
+            }}
+            dropPlaceholderAnimationDuration={200}
+          >
+            {column.cards.map((card, index) => (
+              <Draggable key={index}>
+                <Card card={card} />
+              </Draggable>
+            ))}
+                
+          </Container>
+        </ul>
+      }
       <footer className="footer-broad">
         <div className="container">
           <i className="fa fa-plus icon" />
