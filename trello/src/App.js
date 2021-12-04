@@ -1,8 +1,8 @@
 import React from 'react';
 
 import AppBar from 'components/AppBar/AppBar';
-import BroadBar from 'components/BroadBar/BroadBar';
-import BroadContent from 'components/BroadContent/BroadContent';
+import BroadBar from 'components/BoardBar/BoardBar';
+import BroadContent from 'components/BoardContent/BoardContent';
 
 import './App.scss';
 

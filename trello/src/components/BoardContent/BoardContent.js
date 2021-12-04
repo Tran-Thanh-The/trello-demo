@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { useState, useEffect, useRef } from 'react'
-import './BroadContent.scss'
+import './BoardContent.scss'
 import { initialData } from 'actions/initialData'
 import { Container as BtContainer, Row, Col, Form, Button } from 'react-bootstrap'
 
@@ -10,8 +10,8 @@ import { mapOrder } from 'utilities/sorts'
 import { applyDrag } from 'utilities/dragDrop'
 import { isEmpty } from 'lodash'
 
-export default function BroadContent() {
-  const [broad, setBroad] = useState([])
+export default function BoardContent() {
+  const [board, setBoard] = useState([])
   const [columns, setColumns] = useState([])
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
@@ -19,11 +19,11 @@ export default function BroadContent() {
   const inputNewColumnRef = useRef(null)
 
   useEffect(() => {
-    const broadFromDb = initialData.broads.find(broad => broad.id === 'broad-1')
-    if (broadFromDb) {
-      setBroad(broadFromDb)
+    const boardFromDb = initialData.boards.find(board => board.id === 'board-1')
+    if (boardFromDb) {
+      setBoard(boardFromDb)
 
-      setColumns(mapOrder(broadFromDb.columns, broadFromDb.columnOrder, 'id'))
+      setColumns(mapOrder(boardFromDb.columns, boardFromDb.columnOrder, 'id'))
     }
   }, [])
 
@@ -33,21 +33,22 @@ export default function BroadContent() {
     }
   }, [openNewColumnForm])
 
-  if (isEmpty(broad))
-    return <h1>Broad not found!</h1>
+  if (isEmpty(board))
+    return <h1>Board not found!</h1>
 
   const onColumnDrop = (dropResult) => {
     setColumns(applyDrag(columns, dropResult))
-    let newBroad = broad
-    newBroad.columnOrder = columns.map(column => column.id)
-    setBroad(newBroad)
+    let newBoard = board
+    newBoard.columnOrder = columns.map(column => column.id)
+    setBoard(newBoard)
   }
   const onCardDrop = (id, dropResult) => {
     if (dropResult.addedIndex !== null || dropResult.removedIndex !== null) {
       let newColumns = [...columns];
       let currentColumn = newColumns.find(c => c.id === id)
       currentColumn.cards = applyDrag(currentColumn.cards, dropResult)
-      currentColumn.cardOrder = currentColumn.cards.map(i => i.id)
+      // if (currentColumn.cards)  
+        currentColumn.cardOrder = currentColumn.cards.map(i => i.id)
 
       setColumns(newColumns)
     }
@@ -60,19 +61,19 @@ export default function BroadContent() {
     if (newColumnTitle !== '') {
       const newColumn = {
         id: Math.random().toString(36).substr(2, 5),
-        broadId: broad.id,
+        boardId: board.id,
         title: newColumnTitle.trim(),
         cardOrder: [],
-        card: []
+        cards: []
       }
 
       let newColumns = [...columns]
       newColumns.push(newColumn)
 
-      let newBroad = broad
-      newBroad.columnOrder = newColumns.map(column => column.id)
+      let newBoard = board
+      newBoard.columnOrder = newColumns.map(column => column.id)
 
-      setBroad(newBroad)
+      setBoard(newBoard)
       setColumns(newColumns)
 
       setOpenNewColumnForm(false)
@@ -90,8 +91,28 @@ export default function BroadContent() {
     setOpenNewColumnForm(false)
   }
 
+  const updateColumn = (newColumn) => {
+    const newColumnId = newColumn.id
+
+    let newColumns = [...columns]
+    const IndexColumnUpdate = newColumns.findIndex((c) => c.id === newColumnId)
+
+    if (newColumn._destroy) {
+      newColumns.splice(IndexColumnUpdate, 1)
+    } else {
+      newColumns.splice(IndexColumnUpdate, 1, newColumn)
+    }
+
+    let newBoard = board
+    newBoard.columnOrder = newColumns.map(column => column.id)
+    newBoard.columns = newColumns
+
+    setBoard(newBoard)
+    setColumns(newColumns)
+  }
+
   return (
-    <div className="broad-container">
+    <div className="board-container">
       <Container
         orientation="horizontal"
         onDrop={onColumnDrop}
@@ -105,7 +126,7 @@ export default function BroadContent() {
       >
         {columns.map((column, index) => (
           <Draggable key={index}>
-            <Column column={column} onCardDrop={onCardDrop}/>
+            <Column column={column} onCardDrop={onCardDrop} updateColumn={updateColumn}/>
           </Draggable>
         ))}
       </Container>
