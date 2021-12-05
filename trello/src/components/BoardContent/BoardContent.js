@@ -14,7 +14,10 @@ export default function BoardContent() {
   const [board, setBoard] = useState([])
   const [columns, setColumns] = useState([])
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
+  const toggleNewColumnForm = () => setOpenNewColumnForm(true)
+
   const [newColumnTitle, setNewColumnTitle] = useState('')
+  const onNewColumnTitleChange = (e) => setNewColumnTitle(e.target.value)
 
   const inputNewColumnRef = useRef(null)
 
@@ -53,9 +56,6 @@ export default function BoardContent() {
       setColumns(newColumns)
     }
   }
-  const toggleNewColumnForm = () => {
-    setOpenNewColumnForm(true)
-  }
 
   const addNewColumn = () => {
     if (newColumnTitle !== '') {
@@ -83,9 +83,7 @@ export default function BoardContent() {
       inputNewColumnRef.current.focus();
     }
   }
-  const onNewColumnTitleChange = (e) => {
-    setNewColumnTitle(e.target.value)
-  }
+  
   const removeNewColumn = () => {
     setNewColumnTitle('')
     setOpenNewColumnForm(false)
@@ -126,7 +124,7 @@ export default function BoardContent() {
       >
         {columns.map((column, index) => (
           <Draggable key={index}>
-            <Column column={column} onCardDrop={onCardDrop} updateColumn={updateColumn}/>
+            <Column column={column} onCardDrop={onCardDrop} updateColumn={updateColumn} />
           </Draggable>
         ))}
       </Container>
@@ -158,7 +156,7 @@ export default function BoardContent() {
               >
                 Add column
               </Button>
-              <span className="cancel-new-column" onClick={removeNewColumn}> <i className="fa fa-trash icon" /> </span>
+              <span className="cancel-new-column cancel-icon" onClick={removeNewColumn}> <i className="fa fa-trash icon" /> </span>
             </Col>
           </Row>
         }

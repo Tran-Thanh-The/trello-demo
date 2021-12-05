@@ -87,21 +87,32 @@
       border: 1px dashed #abc;
       margin: 5px;
     }
+
+    .add-new-card-area {
+      .textarea-enter-new-card {
+        min-height: 54px;
+        max-height: 162px;
+        margin-bottom: 10px;
+      }
+    }
   }
 
   .footer-board {
     background-color: $bg-board-color;
     border-bottom-left-radius: $border-board;
     border-bottom-right-radius: $border-board;
-    height: 50px;
+    height: 44px;
     padding: 0 16px 0 10px;
     display: flex;
 
     div.container {
       margin: auto;
       width: 100%;
-      background-color: #dadbe2;
-      padding: 6px;
+      padding: 4px 6px;
+
+      &:hover {
+        background-color: #dadbe2;
+      }
       i {
         padding-left: 4px;
       }
@@ -109,6 +120,12 @@
         background-color: unset;
         outline: none;
         border: none;
+      }
+    }
+
+    .button-add-new-card {
+      i {
+        padding: 0 20px;
       }
     }
   }

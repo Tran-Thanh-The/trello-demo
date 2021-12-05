@@ -60,17 +60,5 @@
       width: 40%;
       background-color: $primary-color-blur;
     }
-
-    span.cancel-new-column {
-      i {
-        font-size: 18px;
-        cursor: pointer;
-        padding: 0 10px;
-
-        &:hover {
-          color: #eb4d4b;
-        }
-      }
-    }
   }
 }
