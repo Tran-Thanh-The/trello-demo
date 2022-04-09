@@ -10,9 +10,11 @@ import ConfirmModal from 'components/common/confirmModal'
 import { MODAL_ACTION_CONFIRM } from 'utilities/constants'
 import Card from 'components/Card/Card'
 
+import { createNewCard, updateColumn } from 'actions/ApiCall'
+
 export default function Column(props) {
-  const { column, onCardDrop, updateColumn } = props
-  const cards = mapOrder(column.cards, column.cardOrder, 'id')
+  const { column, onCardDrop, onUpdateColumnState } = props
+  const cards = mapOrder(column.cards, column.cardOrder, '_id')
   const [showConfirmRemove, setShowConfirmRemove] = useState(false)
   const [columnTitle, setColumnTitle] = useState('')
   const toggleShowConfirmRemove = () => setShowConfirmRemove(!showConfirmRemove)
@@ -36,49 +38,64 @@ export default function Column(props) {
   useEffect(() => {
     setColumnTitle(column.title)
   }, [column.title])
+
+  // remove column
   const onConfirmAction = (type) => {
-    if (MODAL_ACTION_CONFIRM) {
+    if (type === MODAL_ACTION_CONFIRM) {
       const newColumn = {
         ...column,
         _destroy: true
       }
-      updateColumn(newColumn)
+      // Call api
+      updateColumn(newColumn._id, newColumn).then((updatedColumn) => {
+        onUpdateColumnState(updatedColumn)
+      })
     }
     toggleShowConfirmRemove()
   }
+
   const selectAllInlineText = (e) => {
     e.target.focus()
     e.target.select()
   }
+
   const handleColumnTitleChange = (e) => {
     setColumnTitle(e.target.value)
   }
+
+  // update column title
   const handleColumnTitleBlur = (e) => {
     e.target.blur()
-    const newColumn = {
-      ...column,
-      title: columnTitle
+    if (column.title !== columnTitle) {
+      const newColumn = {
+        ...column,
+        title: columnTitle
+      }
+      updateColumn(newColumn._id, newColumn).then((updatedColumn) => {
+        updatedColumn.cards = newColumn.cards
+        onUpdateColumnState(updatedColumn)
+      })
     }
-    updateColumn(newColumn)
   }
 
   const addNewCard = () => {
     if (newCardTitle !== '') {
       const newCard = {
-        id: Math.random().toString(36).substr(2, 5),
         boardId: column.boardId,
-        columnId: column.id,
-        title: newCardTitle.trim(),
-        cover: ''
+        columnId: column._id,
+        title: newCardTitle.trim()
       }
+      // Call api
+      createNewCard(newCard).then(card => {
+        let newColumn = cloneDeep(column)
+        newColumn.cards.push(card)
+        newColumn.cardOrder.push(card._id)
+  
+        onUpdateColumnState(newColumn)
+        setNewCardTitle('')
+        toggleNewCardForm()
+      })
 
-      let newColumn = cloneDeep(column)
-      newColumn.cards.push(newCard)
-      newColumn.cardOrder = newColumn.cards.map(card => card.id)
-
-      updateColumn(newColumn)
-      setNewCardTitle('')
-      toggleNewCardForm()
     }
     else {
       inputNewCardRef.current.focus();
@@ -114,27 +131,29 @@ export default function Column(props) {
         </div>
       </div>
       <ul className="card-list">
-        <Container
-          groupName="col"
-          onDrop={dropResult => onCardDrop(column.id, dropResult)}
-          getChildPayload={index => cards[index]}
-          dragClass="card-ghost"
-          dropClass="card-ghost-drop"
-          dropPlaceholder={{                      
-            animationDuration: 150,
-            showOnTop: true,
-            className: 'card-drop-preview' 
-          }}
-          dropPlaceholderAnimationDuration={200}
-        >
-          {
-            column.cards.map((card, index) => (
-              <Draggable key={index}>
-                <Card card={card} />
-              </Draggable>
-            ))
-          }
-        </Container>
+        { column.cards &&
+          <Container
+            groupName="col"
+            onDrop={dropResult => onCardDrop(column._id, dropResult)}
+            getChildPayload={index => cards[index]}
+            dragclassName="card-ghost"
+            dropclassName="card-ghost-drop"
+            dropPlaceholder={{                      
+              animationDuration: 150,
+              showOnTop: true,
+              className: 'card-drop-preview' 
+            }}
+            dropPlaceholderAnimationDuration={200}
+          >
+            {
+              column.cards.map((card, index) => (
+                <Draggable key={index}>
+                  <Card card={card} />
+                </Draggable>
+              ))
+            }
+          </Container>
+        }
         
         { openNewCardForm && 
           <div className="add-new-card-area">

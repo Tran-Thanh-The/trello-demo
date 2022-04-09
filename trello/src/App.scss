@@ -16,7 +16,8 @@ body {
   display: grid;
   grid-template-rows: 40px 50px calc(100vh - 90px);
   height: 100vh;
-  background-color: $primary-color-blur;
+  // background-color: $primary-color-blur;
+  background-image: url('https://vnreview.vn/image/21/43/71/2143719.jpg?t=1606044197558');
 
   .icon {
     font-size: 14px;
